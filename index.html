@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Notes App</title>
+    <link rel="stylesheet" href="/src/styles/style.css" />
+  </head>
+  <body>
+    <main>
+      <div class="container">
+        <section id="activeSection">
+          <h2>Active Notes</h2>
+          <note-list id="activeNoteList"></note-list>
+        </section>
+
+        <section id="archivedSection">
+          <h2>Archived Notes</h2>
+          <note-list id="archivedNoteList"></note-list>
+        </section>
+      </div>
+    </main>
+
+    <script type="module" src="/src/app.js"></script>
+  </body>
+</html>
