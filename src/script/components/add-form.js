@@ -118,7 +118,7 @@ class AddForm extends HTMLElement {
           }
     
           .form-container {
-            background-color: white;
+            background-color: #FB929E;
             padding: 16px;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -141,15 +141,18 @@ class AddForm extends HTMLElement {
           button {
             padding: 10px;
             font-size: 1rem;
-            background-color: cornflowerblue;
-            color: white;
+            background-color: #FFF6F6;
+            color: black;
             border: none;
             cursor: pointer;
             border-radius: 4px;
+            font-weight: bold;
           }
     
           button:hover {
-            background-color: #3367d6;
+            background-color: #AEDEFC;
+            color: white;
+            font-weight: bold;
           }
 
           .error-message {

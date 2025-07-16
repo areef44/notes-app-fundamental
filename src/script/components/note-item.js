@@ -35,9 +35,9 @@ class NoteItem extends HTMLElement {
             :host {
                 display: block;
                 border-radius: 8px;
-                
                 box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
                 overflow: hidden;
+                color: black;
             }
         
             .note-info {
@@ -51,12 +51,17 @@ class NoteItem extends HTMLElement {
             .note-info__description p {
                 display: -webkit-box;
                 margin-top: 10px;
-                
                 overflow: hidden;
-        
                 text-overflow: ellipsis;
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 5; /* number of lines to show */
+            }
+
+            .card {
+              background-color: #FFF6F6;
+              width: 100%; 
+              height: 100%; 
+              box-sizing: border-box;
             }
         `;
   }

@@ -7,26 +7,31 @@
     <link rel="stylesheet" href="/src/styles/style.css" />
   </head>
   <body>
+    <header>
+      <app-bar title="My Notes App"></app-bar>
+    </header>
     <main>
       <div class="container">
-
-        <section>
-          <h2>Add Notes</h2>
+        <section-with-title id="note" class="note" title="Form Add Note">
           <add-form></add-form>
-        </section>
+        </section-with-title>
 
-        <section id="activeSection">
-          <h2>Active Notes</h2>
-          <note-list id="activeNoteList"></note-list>
-        </section>
-
-        <section id="archivedSection">
-          <h2>Archived Notes</h2>
-          <note-list id="archivedNoteList"></note-list>
-        </section>
+        <section-with-title id="note" class="note" title="List Note">
+          <section-list-note id="note" class="note" title="Active Note">
+            <note-list id="activeNoteList"></note-list>
+          </section-list-note>
+  
+          <section-list-note id="note" class="note" title="Archived Note">
+            <note-list id="archivedNoteList"></note-list>
+          </section-list-note>
+        </section-with-title>
 
       </div>
     </main>
+
+    <footer>
+      <footer-bar title="Muhammad Arif - 2025"></footer-bar>
+    </footer>
 
     <script type="module" src="/src/app.js"></script>
   </body>
