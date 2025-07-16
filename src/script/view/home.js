@@ -4,6 +4,23 @@ import Notes from "../data/local/notes.js";
 const home = () => {
   const activeNoteListElement = document.querySelector("#activeNoteList");
   const archivedNoteListElement = document.querySelector("#archivedNoteList");
+  const addNoteForm = document.querySelector('add-form')
+
+  addNoteForm.addEventListener("add-note", (event) => {
+    const { title, body } = event.detail;
+
+    const newNote = {
+      id: 'notes-' + Date.now(),
+      title,
+      body,
+      createdAt: new Date().toISOString(),
+      archived: false
+    }
+
+    Notes.addNote(newNote)
+
+    showNotes();
+  })
 
   const showNotes = () => {
 
