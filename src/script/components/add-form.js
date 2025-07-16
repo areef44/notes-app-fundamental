@@ -20,72 +20,69 @@ class AddForm extends HTMLElement {
 
   connectedCallback() {
     const form = this._shadowRoot.querySelector("form");
-  const titleInput = this._shadowRoot.querySelector("#title");
-  const bodyInput = this._shadowRoot.querySelector("#body");
-  const titleError = this._shadowRoot.querySelector("#title-error");
-  const bodyError = this._shadowRoot.querySelector("#body-error");
+    const titleInput = this._shadowRoot.querySelector("#title");
+    const bodyInput = this._shadowRoot.querySelector("#body");
+    const titleError = this._shadowRoot.querySelector("#title-error");
+    const bodyError = this._shadowRoot.querySelector("#body-error");
 
-  // Status apakah field pernah di-touched (diinput atau submit)
-  let touched = {
-    title: false,
-    body: false,
-  };
+    let touched = {
+      title: false,
+      body: false,
+    };
 
-  const validateField = (field) => {
-    const value = field.value.trim();
-    let msg = "";
+    const validateField = (field) => {
+      const value = field.value.trim();
+      let msg = "";
 
-    if (field.id === "title") {
-      msg = FormValidator.getTitleError(value);
-      if (touched.title) titleError.textContent = msg;
-    }
+      if (field.id === "title") {
+        msg = FormValidator.getTitleError(value);
+        if (touched.title) titleError.textContent = msg;
+      }
 
-    if (field.id === "body") {
-      msg = FormValidator.getBodyError(value);
-      if (touched.body) bodyError.textContent = msg;
-    }
+      if (field.id === "body") {
+        msg = FormValidator.getBodyError(value);
+        if (touched.body) bodyError.textContent = msg;
+      }
 
-    return !msg;
-  };
+      return !msg;
+    };
 
-  // Event input per field
-  titleInput.addEventListener("input", () => {
-    touched.title = true;
-    validateField(titleInput);
-  });
+    titleInput.addEventListener("input", () => {
+      touched.title = true;
+      validateField(titleInput);
+    });
 
-  bodyInput.addEventListener("input", () => {
-    touched.body = true;
-    validateField(bodyInput);
-  });
+    bodyInput.addEventListener("input", () => {
+      touched.body = true;
+      validateField(bodyInput);
+    });
 
-  // Saat form disubmit
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
 
-    touched.title = true;
-    touched.body = true;
+      touched.title = true;
+      touched.body = true;
 
-    const isTitleValid = validateField(titleInput);
-    const isBodyValid = validateField(bodyInput);
+      const isTitleValid = validateField(titleInput);
+      const isBodyValid = validateField(bodyInput);
 
-    if (!isTitleValid || !isBodyValid) return;
+      if (!isTitleValid || !isBodyValid) return;
 
-    const title = titleInput.value.trim();
-    const body = bodyInput.value.trim();
+      const title = titleInput.value.trim();
+      const body = bodyInput.value.trim();
 
-    this.dispatchEvent(
-      new CustomEvent("add-note", {
-        detail: { title, body },
-        bubbles: true,
-      })
-    );
+      this.dispatchEvent(
+        new CustomEvent("add-note", {
+          detail: { title, body },
+          bubbles: true,
+        })
+      );
 
-    form.reset();
-    touched = { title: false, body: false };
-    titleError.textContent = "";
-    bodyError.textContent = "";
-  });
+      form.reset();
+      touched = { title: false, body: false };
+      titleError.textContent = "";
+      bodyError.textContent = "";
+    });
   }
 
   disconnectedCallback() {
