@@ -161,6 +161,23 @@ class AddForm extends HTMLElement {
             margin-top: -8px;
             margin-bottom: 8px;
           }
+
+          .set-label {
+            color: #e8f9ff;
+            font-weight: bold;
+          }
+
+          .set-mandatory {
+            color: red;
+          }
+
+          .mandatory-note {
+            text-align: right;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            color: white;
+            font-weight: bold;
+            margin-right: 8px;          
         `;
   }
 
@@ -170,16 +187,19 @@ class AddForm extends HTMLElement {
 
     this._shadowRoot.appendChild(this._style);
     this._shadowRoot.innerHTML += `
-        <div class="form-container">
+      <div class="form-container">
+        <div class="mandatory-note">
+          <span><span class="set-mandatory">*</span> Wajib Diisi</span>
+        </div>
         <form>
-          <label>Title</label>
+          <label class="set-label">Title <span class="set-mandatory">*</span></label>
           <input id="title" name="title" type="text" placeholder="Judul catatan" />
           <small id="title-error" class="error-message"></small>
-          <label>Content</label>
+          <label class="set-label">Content <span class="set-mandatory">*</span></label>
           <textarea id="body" name="body" placeholder="Isi catatan..." rows="4"></textarea>
           <small id="body-error" class="error-message"></small>
           <button type="submit">Tambah Catatan</button>
-        </form>
+          </form>
       </div>
         `;
   }
