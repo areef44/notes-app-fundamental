@@ -53,6 +53,7 @@ class NoteList extends HTMLElement {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: ${this.gutter}px;
+        min-height: 250px;
       }
 
       @media screen and (max-width: 1200px) {

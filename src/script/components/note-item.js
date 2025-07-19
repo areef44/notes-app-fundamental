@@ -1,3 +1,4 @@
+// NoteItem Component - Updated (Remove draggable from shadow DOM)
 class NoteItem extends HTMLElement {
   _shadowRoot = null;
   _style = null;
@@ -22,7 +23,6 @@ class NoteItem extends HTMLElement {
 
   set note(value) {
     this._note = value;
-
     this.render();
   }
 
@@ -32,38 +32,69 @@ class NoteItem extends HTMLElement {
 
   _updateStyle() {
     this._style.textContent = `
-            :host {
-                display: block;
-                border-radius: 8px;
-                box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
-                overflow: hidden;
-                color: black;
-            }
-        
-            .note-info {
-                padding: 8px 32px;
-            }
-        
-            .note-info__title h2 {
-                font-weight: lighter;
-            }
-        
-            .note-info__description p {
-                display: -webkit-box;
-                margin-top: 10px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 5; /* number of lines to show */
-            }
+      :host {
+        display: block;
+        border-radius: 8px;
+        box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+        color: black;
+      }
 
-            .card {
-              background-color: #FFF6F6;
-              width: 100%; 
-              height: 100%; 
-              box-sizing: border-box;
-            }
-        `;
+      .note-info {
+        padding: 8px 32px;
+      }
+
+      .note-info__title h2 {
+        font-weight: lighter;
+      }
+
+      .note-info__description p {
+        display: -webkit-box;
+        margin-top: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 5;
+      }
+
+      .card {
+        background-color: #FFF6F6;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .card.dragging {
+        cursor: move;
+        background-color: white !important;
+        opacity: 1 !important;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .btn-delete {
+        width: 100%;
+      }
+      
+      .btn-delete button {
+        background-color: salmon;
+        color: white;
+        width: 100%;
+        height: 100%;
+        display: block;
+        padding: 8px;
+        border: 0;
+        font-size: 16px;
+        cursor: pointer;
+        font-weight: bold
+      }
+
+      .btn-delete button:hover {
+        background-color: white;
+        color: black;
+      }
+    `;
   }
 
   render() {
@@ -77,21 +108,50 @@ class NoteItem extends HTMLElement {
     this._shadowRoot.appendChild(this._style);
 
     this._shadowRoot.innerHTML += `
-            <div class="card">
-                <div class="note-info">
-                    <div class="note-info__title">
-                        <h2>${this._note.title}</h2>
-                    </div>
-                    <div class="note-info__description">
-                        <p><strong>Content:</strong></p>
-                        <p>${this._note.body}</p>
-                    </div>
-                        <div class="note-info__description">
-                        <p><strong>Dibuat:</strong> ${createdAtFormatted}</p>
-                    </div>
-                </div>
-            </div>
-        `;
+      <div class="card">
+        <div class="note-info">
+          <div class="note-info__title">
+            <h2>${this._note.title}</h2>
+          </div>
+          <div class="note-info__description">
+            <p><strong>Content:</strong></p>
+            <p>${this._note.body}</p>
+          </div>
+          <div class="note-info__description">
+            <p><strong>Dibuat:</strong> ${createdAtFormatted}</p>
+          </div>  
+        </div>
+      </div>
+      <div class="btn-delete">
+          <button>Delete</button>
+      </div>
+    `;
+
+    const card = this._shadowRoot.querySelector(".card");
+
+    if (card) {
+      // Click handler for opening detail
+      card.addEventListener("click", () => {
+        const modal = document.querySelector("note-detail");
+        if (modal) {
+          modal.showDetail(this._note.id);
+        }
+      });
+    }
+
+    const deleteButton = this._shadowRoot.querySelector(".btn-delete button");
+    if (deleteButton) {
+      deleteButton.addEventListener("click", (event) => {
+        event.stopPropagation(); // Supaya tidak ikut klik ke card
+        this.dispatchEvent(
+          new CustomEvent("delete-note", {
+            detail: { id: this._note.id },
+            bubbles: true,
+            composed: true,
+          })
+        );
+      });
+    }
   }
 }
 
