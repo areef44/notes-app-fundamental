@@ -75,7 +75,7 @@ class AddForm extends HTMLElement {
         new CustomEvent("add-note", {
           detail: { title, body },
           bubbles: true,
-        })
+        }),
       );
 
       form.reset();
@@ -89,7 +89,7 @@ class AddForm extends HTMLElement {
     this._shadowRoot
       .querySelector("form")
       .removeEventListener("submit", (event) =>
-        this._onFormSubmit(event, this)
+        this._onFormSubmit(event, this),
       );
     this.removeEventListener(this._submitEvent, this._onFormSubmit);
   }
@@ -105,7 +105,7 @@ class AddForm extends HTMLElement {
       new CustomEvent(this._addNoteEvent, {
         detail: { title, body },
         bubbles: true,
-      })
+      }),
     );
 
     this._shadowRoot.querySelector("form").reset();

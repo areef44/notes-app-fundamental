@@ -2,9 +2,9 @@ import Utils from "../utils.js";
 import NotesApi from "../data/remote/notes-api.js";
 import { animate } from "animejs";
 import Sortable from "sortablejs";
-import alertify from 'alertifyjs';
-import 'alertifyjs/build/css/alertify.min.css';
-import 'alertifyjs/build/css/themes/default.min.css';
+import alertify from "alertifyjs";
+import "alertifyjs/build/css/alertify.min.css";
+import "alertifyjs/build/css/themes/default.min.css";
 
 const home = () => {
   const activeNoteListElement = document.querySelector("#activeNoteList");
@@ -12,7 +12,7 @@ const home = () => {
   const addNoteForm = document.querySelector("add-form");
   const loadingElement = document.querySelector("loading-indicator");
 
-  alertify.set('notifier','position', 'top-center');
+  alertify.set("notifier", "position", "top-center");
 
   addNoteForm.addEventListener("add-note", async (event) => {
     const { title, body } = event.detail;
@@ -27,19 +27,17 @@ const home = () => {
 
     try {
       await NotesApi.createNote(newNote);
-    
+
       setTimeout(async () => {
-        alertify.success('Catatan berhasil dibuat!');
+        alertify.success("Catatan berhasil dibuat!");
         await showNotes();
       }, 1000);
-    
     } catch (error) {
       alertify.error(`Gagal membuat catatan: ${error}`);
     }
   });
 
   const showNotes = async () => {
-    
     showLoading();
     try {
       const activeNotes = await NotesApi.getActiveNotes();
@@ -55,14 +53,13 @@ const home = () => {
   };
 
   const displayResult = (activeNotes, archivedNotes) => {
-
-    if (activeNoteListElement.tagName === 'NOTE-LIST') {
+    if (activeNoteListElement.tagName === "NOTE-LIST") {
       activeNoteListElement.notes = activeNotes;
     }
-    if (archivedNoteListElement.tagName === 'NOTE-LIST') {
+    if (archivedNoteListElement.tagName === "NOTE-LIST") {
       archivedNoteListElement.notes = archivedNotes;
     }
-    
+
     const createNoteItems = (notes) =>
       notes.map((note) => {
         // Create wrapper element for dragging
@@ -176,10 +173,10 @@ const home = () => {
         try {
           if (movedToArchived) {
             await NotesApi.setArchiveNote(noteId);
-            alertify.success('Catatan berhasil diarsipkan!');
+            alertify.success("Catatan berhasil diarsipkan!");
           } else {
             await NotesApi.setUnarchiveNote(noteId);
-            alertify.success('Catatan berhasil diaktifkan!');
+            alertify.success("Catatan berhasil diaktifkan!");
           }
 
           await showNotes();
@@ -216,10 +213,10 @@ const home = () => {
           try {
             if (movedToArchived) {
               await NotesApi.setArchiveNote(noteId);
-              alertify.success('Catatan berhasil diarsipkan!');
+              alertify.success("Catatan berhasil diarsipkan!");
             } else {
               await NotesApi.setUnarchiveNote(noteId);
-              alertify.success('Catatan berhasil diaktifkan!');
+              alertify.success("Catatan berhasil diaktifkan!");
             }
 
             await showNotes();

@@ -126,7 +126,6 @@ class NoteDetail extends HTMLElement {
       noteInfo.appendChild(titleEl);
       noteInfo.appendChild(bodyEl);
       noteInfo.appendChild(createdAtEl);
-
     } catch (error) {
       console.error("Gagal mengambil detail:", error);
       noteInfo.innerHTML = `<p style="color:red;">Gagal memuat data detail.</p>`;
