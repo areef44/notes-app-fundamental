@@ -24,7 +24,7 @@ class SectionList extends HTMLElement {
               }
               
               .note {
-                background-color: #FB929E;
+                background-color: #0a2540;
                 padding: 16px;
                 border-radius: 5px;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -37,9 +37,14 @@ class SectionList extends HTMLElement {
                   color: #e8f9ff;
               }
 
-              .item-slot{
-                padding: 8px;
+              .title-section span {
+                margin-block-end: 1rem;
+                font-size: 18px;
+                font-weight: bold;
+                color: #e8f9ff;
               }
+
+              
       `;
   }
 
@@ -63,7 +68,7 @@ class SectionList extends HTMLElement {
     this._shadowRoot.innerHTML += `
           <section id="note" class="note">
               <div class="title-section">
-                  <h3>${this.title}</h3>
+                  <span>${this.title}</span>
               </div>
   
               <div class="item-slot">

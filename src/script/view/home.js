@@ -39,6 +39,7 @@ const home = () => {
   });
 
   const showNotes = async () => {
+    
     showLoading();
     try {
       const activeNotes = await NotesApi.getActiveNotes();
@@ -54,6 +55,14 @@ const home = () => {
   };
 
   const displayResult = (activeNotes, archivedNotes) => {
+
+    if (activeNoteListElement.tagName === 'NOTE-LIST') {
+      activeNoteListElement.notes = activeNotes;
+    }
+    if (archivedNoteListElement.tagName === 'NOTE-LIST') {
+      archivedNoteListElement.notes = archivedNotes;
+    }
+    
     const createNoteItems = (notes) =>
       notes.map((note) => {
         // Create wrapper element for dragging

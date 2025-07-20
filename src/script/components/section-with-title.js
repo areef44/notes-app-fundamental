@@ -24,14 +24,17 @@ class SectionWithTitle extends HTMLElement {
               }
               
               .title-section {
-                  margin-block-end: 2rem;
-                  font-size: 1.2em;
-                  color: #FB929E;
+                  font-size: 1rem;
+                  color: #666;
+                  margin-top: 4px;
+                  margin-bottom: 4px;
               }
 
-              .item-slot{
-                padding: 8px;
+              .title-section span {
+                font-size: 24px;
+                font-weight: bold;
               }
+            
       `;
   }
 
@@ -55,7 +58,7 @@ class SectionWithTitle extends HTMLElement {
     this._shadowRoot.innerHTML += `
           <section id="note" class="note">
               <div class="title-section">
-                  <h2>${this.title}</h2>
+                  <span>${this.title}</span>
               </div>
   
               <div class="item-slot">

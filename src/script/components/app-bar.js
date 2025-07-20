@@ -38,13 +38,13 @@ class AppBar extends HTMLElement {
             :host {
                 display: block;
                 width: 100%;
-                color: #e8f9ff;
+                color: white;
                 box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
             }
         
             div {
                 padding: 24px 20px;
-                background-color: #FB929E;
+                background-color: #0a2540;
             }
         
             .brand-name {

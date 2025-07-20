@@ -38,35 +38,85 @@ class NoteItem extends HTMLElement {
         box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
         overflow: hidden;
         color: black;
+        min-height: 275px;
+        max-width: 275px;
+        height: 100%;
+        width: 100%;
+      }
+
+      .note-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
       }
 
       .note-info {
-        flex-grow: 1;
+        padding: 16px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
         overflow: hidden;
       }
 
-      .note-info__title h2 {
-        font-weight: lighter;
+      .note-info__title span {
+        font-weight: bold;
+        font-size: 24px;
+        margin: 0;
+        word-wrap: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.2;
+      }
+
+      .note-info__title {
+        margin-bottom: 12px;
+      }
+
+      .note-info__description {
+        flex: 1;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
       }
 
       .note-info__description p {
-        display: -webkit-box;
-        margin-top: 10px;
+        margin: 0 0 8px 0;
+        font-size: 14px;
+        line-height: 1.4;
+        white-space: pre-line;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+
+      .note-content {
+        flex: 1;
         overflow: hidden;
-        text-overflow: ellipsis;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: pre-line;
+        display: -webkit-box;
+        -webkit-line-clamp: 6;
         -webkit-box-orient: vertical;
-        -webkit-line-clamp: 3; /* bisa atur berapa baris yang tampil */
+        text-overflow: ellipsis;
+      }
+
+      .note-date {
+        margin-top: auto;
+        padding-top: 8px;
+        font-size: 12px;
+        color: #666;
+        border-top: 1px solid #eee;
       }
 
       .card {
-        background-color: #FFF6F6;
+        background-color: white;
+        flex: 1; 
         box-sizing: border-box;
         cursor: pointer;
         user-select: none;
         display: flex;
         flex-direction: column;
-        justify-content: space-between; /* Supaya tombol selalu di bawah */
-        padding: 16px;
+        height: 100%;
       }
 
       .card.dragging {
@@ -77,25 +127,27 @@ class NoteItem extends HTMLElement {
       }
 
       .btn-delete {
-        width: 100%;
+        height: 44px;
+        flex-shrink: 0;
       }
       
       .btn-delete button {
-        background-color: salmon;
+        background-color: #ff6692;
         color: white;
         width: 100%;
         height: 100%;
         display: block;
-        padding: 8px;
+        padding: 0;
         border: 0;
-        font-size: 16px;
+        font-size: 14px;
         cursor: pointer;
-        font-weight: bold
+        font-weight: bold;
+        transition: all 0.2s ease;
       }
 
       .btn-delete button:hover {
-        background-color: white;
-        color: black;
+        background-color: #e84371;
+        color: white;
       }
     `;
   }
@@ -105,29 +157,31 @@ class NoteItem extends HTMLElement {
     this._updateStyle();
 
     const createdAtFormatted = new Date(this._note.createdAt).toLocaleString(
-      "id-ID"
+      "id-ID",
     );
 
     this._shadowRoot.appendChild(this._style);
 
     this._shadowRoot.innerHTML += `
-      <div class="card">
-        <div class="note-info">
-          <div class="note-info__title">
-            <h2>${this._note.title}</h2>
-          </div>
-          <div class="note-info__description">
-            <p><strong>Content:</strong></p>
-            <p>${this._note.body}</p>
-          </div>
-          <div class="note-info__description">
-            <p><strong>Dibuat:</strong> ${createdAtFormatted}</p>
-          </div>  
+    <div class="note-container">
+    <div class="card">
+      <div class="note-info">
+        <div class="note-info__title">
+          <span>${this._note.title}</span>
+        </div>
+        <div class="note-info__description">
+          <p><strong>Content:</strong></p>
+          <p class="note-content">${this._note.body}</p>
+        </div>
+        <div class="note-date">
+          <p><strong>Dibuat:</strong> ${createdAtFormatted}</p>
         </div>
       </div>
-      <div class="btn-delete">
-          <button>Delete</button>
-      </div>
+    </div>
+    <div class="btn-delete">
+      <button>Delete</button>
+    </div>
+    </div>
     `;
 
     const card = this._shadowRoot.querySelector(".card");
@@ -151,7 +205,7 @@ class NoteItem extends HTMLElement {
             detail: { id: this._note.id },
             bubbles: true,
             composed: true,
-          })
+          }),
         );
       });
     }
