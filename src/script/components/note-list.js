@@ -6,6 +6,7 @@ class NoteList extends HTMLElement {
 
   _column = 4;
   _gutter = 16;
+  _notes = [];
 
   static get observedAttributes() {
     return ["column", "gutter"];
@@ -42,6 +43,15 @@ class NoteList extends HTMLElement {
     return this._gutter;
   }
 
+  set notes(value) {
+    this._notes = value;
+    this.render();
+  }
+
+  get notes() {
+    return this._notes;
+  }
+
   // STYLE
   _updateStyle() {
     this._style.textContent = `
@@ -53,6 +63,17 @@ class NoteList extends HTMLElement {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: ${this.gutter}px;
+        min-height: 275px;
+      }
+
+      .empty-message {
+        grid-column: 1 / -1; 
+        text-align: center;
+        padding: 80px 20px;
+        color: white;
+        font-size: 24px;
+        font-style: italic;
+        font-weight: bold;
       }
 
       @media screen and (max-width: 1200px) {
@@ -99,11 +120,19 @@ class NoteList extends HTMLElement {
     this._updateStyle();
 
     this._shadowRoot.appendChild(this._style);
-    this._shadowRoot.innerHTML += `
-      <div class="list">
-        <slot></slot>
-      </div>
-    `;
+    if (this._notes.length === 0) {
+      this._shadowRoot.innerHTML += `
+        <div class="list">
+          <div class="empty-message">Tidak ada catatan tersedia</div>
+        </div>
+      `;
+    } else {
+      this._shadowRoot.innerHTML += `
+        <div class="list">
+          <slot></slot>
+        </div>
+      `;
+    }
   }
 
   // HARUS attributeChangedCallback (bukan attributeChangeCallback)

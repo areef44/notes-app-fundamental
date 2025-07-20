@@ -75,7 +75,7 @@ class AddForm extends HTMLElement {
         new CustomEvent("add-note", {
           detail: { title, body },
           bubbles: true,
-        })
+        }),
       );
 
       form.reset();
@@ -89,7 +89,7 @@ class AddForm extends HTMLElement {
     this._shadowRoot
       .querySelector("form")
       .removeEventListener("submit", (event) =>
-        this._onFormSubmit(event, this)
+        this._onFormSubmit(event, this),
       );
     this.removeEventListener(this._submitEvent, this._onFormSubmit);
   }
@@ -105,7 +105,7 @@ class AddForm extends HTMLElement {
       new CustomEvent(this._addNoteEvent, {
         detail: { title, body },
         bubbles: true,
-      })
+      }),
     );
 
     this._shadowRoot.querySelector("form").reset();
@@ -118,7 +118,7 @@ class AddForm extends HTMLElement {
           }
     
           .form-container {
-            background-color: #FB929E;
+            background-color: #0a2540;
             padding: 16px;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -141,8 +141,8 @@ class AddForm extends HTMLElement {
           button {
             padding: 10px;
             font-size: 1rem;
-            background-color: #FFF6F6;
-            color: black;
+            background-color: #13deb9;
+            color: white;
             border: none;
             cursor: pointer;
             border-radius: 4px;
@@ -150,7 +150,7 @@ class AddForm extends HTMLElement {
           }
     
           button:hover {
-            background-color: #AEDEFC;
+            background-color: #0b7c68;
             color: white;
             font-weight: bold;
           }

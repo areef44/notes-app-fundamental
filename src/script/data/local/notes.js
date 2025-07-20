@@ -107,15 +107,13 @@ const notes = [
 ];
 
 class Notes {
-    static getAll() {
-      return notes;
-    }
-
-    static addNote(newNote){
-      notes.unshift(newNote);
-    }
+  static getAll() {
+    return notes;
   }
-  
+
+  static addNote(newNote) {
+    notes.unshift(newNote);
+  }
+}
+
 export default Notes;
-
-
