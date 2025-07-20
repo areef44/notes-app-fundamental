@@ -1,9 +1,9 @@
-import { animate } from 'animejs' // Jangan pakai 'animejs/lib/anime.es.js'
+import { animate } from "animejs"; // Jangan pakai 'animejs/lib/anime.es.js'
 
 class LoadingIndicator extends HTMLElement {
   constructor() {
     super();
-    this._shadowRoot = this.attachShadow({ mode: 'open' });
+    this._shadowRoot = this.attachShadow({ mode: "open" });
 
     this._shadowRoot.innerHTML = `
       <style>
@@ -46,10 +46,10 @@ class LoadingIndicator extends HTMLElement {
     animate(this._spinner, {
       rotate: 360,
       duration: 1000,
-      ease: 'linear',
-      loop: true
+      ease: "linear",
+      loop: true,
     });
   }
 }
 
-customElements.define('loading-indicator', LoadingIndicator);
+customElements.define("loading-indicator", LoadingIndicator);

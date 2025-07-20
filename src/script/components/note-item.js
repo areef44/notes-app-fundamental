@@ -41,7 +41,8 @@ class NoteItem extends HTMLElement {
       }
 
       .note-info {
-        padding: 8px 32px;
+        flex-grow: 1;
+        overflow: hidden;
       }
 
       .note-info__title h2 {
@@ -54,16 +55,18 @@ class NoteItem extends HTMLElement {
         overflow: hidden;
         text-overflow: ellipsis;
         -webkit-box-orient: vertical;
-        -webkit-line-clamp: 5;
+        -webkit-line-clamp: 3; /* bisa atur berapa baris yang tampil */
       }
 
       .card {
         background-color: #FFF6F6;
-        width: 100%;
-        height: 100%;
         box-sizing: border-box;
         cursor: pointer;
         user-select: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Supaya tombol selalu di bawah */
+        padding: 16px;
       }
 
       .card.dragging {

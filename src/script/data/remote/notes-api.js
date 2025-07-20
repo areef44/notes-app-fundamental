@@ -46,7 +46,7 @@ class NotesApi {
       const response = await fetch(`${BASE_URL}/notes`, {
         method: "POST",
         headers: {
-            'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           title,
@@ -66,9 +66,9 @@ class NotesApi {
     }
   }
 
-  static async getDetailNote(note_id){
+  static async getDetailNote(note_id) {
     try {
-      const response = await fetch(`${BASE_URL}/notes/${note_id}`)
+      const response = await fetch(`${BASE_URL}/notes/${note_id}`);
 
       if (!response.ok) {
         throw new Error(`Gagal membuat catatan. Status: ${response.status}`);
@@ -76,64 +76,70 @@ class NotesApi {
 
       const responseJson = await response.json();
 
-      return responseJson.data
+      return responseJson.data;
     } catch (error) {
       console.error("Get Detail note error: ", error);
       throw error;
     }
   }
 
-  static async setArchiveNote(note_id){
+  static async setArchiveNote(note_id) {
     try {
-      const response = await fetch(`${BASE_URL}/notes/${note_id}/archive`,{
-        method: "POST"
-      })
+      const response = await fetch(`${BASE_URL}/notes/${note_id}/archive`, {
+        method: "POST",
+      });
 
       if (!response.ok) {
-        throw new Error(`Gagal mengarsipkan catatan. Status: ${response.status}`);
+        throw new Error(
+          `Gagal mengarsipkan catatan. Status: ${response.status}`,
+        );
       }
 
       const responseJson = await response.json();
 
-      return responseJson.data
+      return responseJson.data;
     } catch (error) {
       console.error("Set Archive note error: ", error);
       throw error;
     }
   }
 
-  static async setUnarchiveNote(note_id){
+  static async setUnarchiveNote(note_id) {
     try {
-      const response = await fetch(`${BASE_URL}/notes/${note_id}/unarchive`,{
-        method: "POST"
-      })
+      const response = await fetch(`${BASE_URL}/notes/${note_id}/unarchive`, {
+        method: "POST",
+      });
 
       if (!response.ok) {
-        throw new Error(`Gagal membatalkan arsip catatan catatan. Status: ${response.status}`);
+        throw new Error(
+          `Gagal membatalkan arsip catatan catatan. Status: ${response.status}`,
+        );
       }
 
       const responseJson = await response.json();
 
-      return responseJson.data
+      return responseJson.data;
     } catch (error) {
       console.error("Set Unarchive note error: ", error);
       throw error;
     }
   }
 
-  static async deleteNote(note_id){
+  static async deleteNote(note_id) {
     try {
-      const response = await fetch(`${BASE_URL}/notes/${note_id}`,{
-        method: "DELETE"
-      })
+      const response = await fetch(`${BASE_URL}/notes/${note_id}`, {
+        method: "DELETE",
+      });
 
       if (!response.ok) {
-        throw new Error(`Gagal membatalkan arsip catatan catatan. Status: ${response.status}`);
+        throw new Error(
+          `Gagal membatalkan arsip catatan catatan. Status: ${response.status}`,
+        );
       }
 
       const responseJson = await response.json();
 
-      return responseJson.data
+      return responseJson.data;
     } catch (error) {
       console.error("Delete note error: ", error);
       throw error;

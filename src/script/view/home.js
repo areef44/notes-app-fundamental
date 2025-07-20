@@ -1,13 +1,18 @@
 import Utils from "../utils.js";
 import NotesApi from "../data/remote/notes-api.js";
-import {animate} from "animejs";
-import Sortable from "sortablejs"
+import { animate } from "animejs";
+import Sortable from "sortablejs";
+import alertify from 'alertifyjs';
+import 'alertifyjs/build/css/alertify.min.css';
+import 'alertifyjs/build/css/themes/default.min.css';
 
 const home = () => {
   const activeNoteListElement = document.querySelector("#activeNoteList");
   const archivedNoteListElement = document.querySelector("#archivedNoteList");
   const addNoteForm = document.querySelector("add-form");
   const loadingElement = document.querySelector("loading-indicator");
+
+  alertify.set('notifier','position', 'top-center');
 
   addNoteForm.addEventListener("add-note", async (event) => {
     const { title, body } = event.detail;
@@ -20,12 +25,21 @@ const home = () => {
       archived: false,
     };
 
-    await NotesApi.createNote(newNote);
-    await showNotes();
+    try {
+      await NotesApi.createNote(newNote);
+    
+      setTimeout(async () => {
+        alertify.success('Catatan berhasil dibuat!');
+        await showNotes();
+      }, 1000);
+    
+    } catch (error) {
+      alertify.error(`Gagal membuat catatan: ${error}`);
+    }
   });
 
   const showNotes = async () => {
-    showLoading(); 
+    showLoading();
     try {
       const activeNotes = await NotesApi.getActiveNotes();
       const archivedNotes = await NotesApi.getArchivedNotes();
@@ -33,7 +47,7 @@ const home = () => {
       setupDragAndDrop();
       showNoteList();
     } catch (error) {
-      console.error(error);
+      alertify.error(`Gagal menampilkan catatan: ${error}`);
     } finally {
       hideLoading();
     }
@@ -47,7 +61,7 @@ const home = () => {
         wrapper.className = "note-item-wrapper";
         wrapper.setAttribute("data-id", note.id);
         wrapper.draggable = true;
-        
+
         // Add drag handle
         const dragHandle = document.createElement("div");
         dragHandle.className = "note-drag-handle";
@@ -63,7 +77,7 @@ const home = () => {
           font-size: 12px;
           z-index: 10;
         `;
-        
+
         // Create note item
         const noteItemElement = document.createElement("note-item");
         noteItemElement.note = note;
@@ -72,23 +86,24 @@ const home = () => {
           const noteId = e.detail.id;
           try {
             await NotesApi.deleteNote(noteId);
+            alertify.success(`Catatan berhasil dihapus!`);
             await showNotes();
           } catch (error) {
-            console.error("Gagal menghapus note:", error);
+            alertify.error(`Gagal menghapus catatan: ${error}`);
           }
         });
-        
+
         // Style wrapper
         wrapper.style.cssText = `
           position: relative;
           margin: 8px 0;
           transition: all 0.2s ease;
         `;
-        
+
         // Append elements
         wrapper.appendChild(noteItemElement);
         wrapper.appendChild(dragHandle);
-        
+
         // Add drag events to wrapper
         wrapper.addEventListener("dragstart", (event) => {
           event.dataTransfer.setData("text/plain", note.id);
@@ -100,7 +115,7 @@ const home = () => {
           wrapper.classList.remove("dragging");
           wrapper.style.opacity = "1";
         });
-        
+
         return wrapper;
       });
 
@@ -121,7 +136,7 @@ const home = () => {
     Utils.hideElement(archivedNoteListElement);
     Utils.showElement(loadingElement);
   };
-  
+
   const hideLoading = () => {
     Utils.hideElement(loadingElement);
   };
@@ -137,26 +152,25 @@ const home = () => {
 
     // Setup for active notes
     activeNoteListElement._sortable = Sortable.create(activeNoteListElement, {
-      group: 'notes',
+      group: "notes",
       animation: 150,
-      handle: '.note-drag-handle',
-      ghostClass: 'sortable-ghost',
-      chosenClass: 'sortable-chosen',
-      dragClass: 'sortable-drag',
-      
+      handle: ".note-drag-handle",
+      ghostClass: "sortable-ghost",
+      chosenClass: "sortable-chosen",
+      dragClass: "sortable-drag",
+
       async onAdd(event) {
-        
         const noteWrapper = event.item;
         const noteId = noteWrapper.getAttribute("data-id");
-        const movedToArchived = event.to === archivedNoteListElement;
-        
+        const movedToArchived = event.to.isSameNode(archivedNoteListElement);
+
         try {
           if (movedToArchived) {
             await NotesApi.setArchiveNote(noteId);
-           
+            alertify.success('Catatan berhasil diarsipkan!');
           } else {
             await NotesApi.setUnarchiveNote(noteId);
-           
+            alertify.success('Catatan berhasil diaktifkan!');
           }
 
           await showNotes();
@@ -166,62 +180,57 @@ const home = () => {
             scale: [1, 1.05, 1],
             opacity: [1, 0.7, 1],
             duration: 300,
-            ease: 'outQuad'
+            ease: "outQuad",
           });
-
-
         } catch (error) {
-          console.error(error);
-          
+          alertify.error(`Gagal setup catatan: ${error}`);
         }
       },
     });
 
-    // Setup for archived notes  
-    archivedNoteListElement._sortable = Sortable.create(archivedNoteListElement, {
-      group: 'notes',
-      animation: 150,
-      handle: '.note-drag-handle',
-      ghostClass: 'sortable-ghost',
-      chosenClass: 'sortable-chosen',
-      dragClass: 'sortable-drag',
-      
-      
-      async onAdd(event) {
-        
-        const noteWrapper = event.item;
-        const noteId = noteWrapper.getAttribute("data-id");
-        const movedToArchived = event.to === archivedNoteListElement;
-        
-        
-        try {
-          if (movedToArchived) {
-            await NotesApi.setArchiveNote(noteId);
-          } else {
-            await NotesApi.setUnarchiveNote(noteId);
+    // Setup for archived notes
+    archivedNoteListElement._sortable = Sortable.create(
+      archivedNoteListElement,
+      {
+        group: "notes",
+        animation: 150,
+        handle: ".note-drag-handle",
+        ghostClass: "sortable-ghost",
+        chosenClass: "sortable-chosen",
+        dragClass: "sortable-drag",
+
+        async onAdd(event) {
+          const noteWrapper = event.item;
+          const noteId = noteWrapper.getAttribute("data-id");
+          const movedToArchived = event.to.isSameNode(archivedNoteListElement);
+
+          try {
+            if (movedToArchived) {
+              await NotesApi.setArchiveNote(noteId);
+              alertify.success('Catatan berhasil diarsipkan!');
+            } else {
+              await NotesApi.setUnarchiveNote(noteId);
+              alertify.success('Catatan berhasil diaktifkan!');
+            }
+
+            await showNotes();
+
+            // Animation
+            animate(noteWrapper, {
+              scale: [1, 1.05, 1],
+              opacity: [1, 0.7, 1],
+              duration: 300,
+              ease: "outQuad",
+            });
+          } catch (error) {
+            alertify.error(`Gagal setup catatan: ${error}`);
           }
-
-          await showNotes();
-
-          // Animation
-          animate(noteWrapper, {
-            scale: [1, 1.05, 1],
-            opacity: [1, 0.7, 1],
-            duration: 300,
-            ease: 'outQuad'
-          });
-
-        } catch (error) {
-          console.error(error);
-          
-        }
+        },
       },
-    });
-
-    
+    );
 
     // Add CSS for sortable states
-    const style = document.createElement('style');
+    const style = document.createElement("style");
     style.textContent = `
       .sortable-ghost {
         opacity: 0.4;
@@ -245,9 +254,9 @@ const home = () => {
         box-shadow: 0 5px 15px rgba(0,0,0,0.3);
       }
     `;
-    
-    if (!document.querySelector('#sortable-styles')) {
-      style.id = 'sortable-styles';
+
+    if (!document.querySelector("#sortable-styles")) {
+      style.id = "sortable-styles";
       document.head.appendChild(style);
     }
   };
